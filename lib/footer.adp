@@ -1,15 +1,17 @@
 <if @show_p@ true>
-  <if @comments:rowcount@ gt 0>
-    <div class="developer-support-footer">
+  <div class="developer-support-footer">
+    <if @errcount@ gt 0>
+      <p style="color: red">errors: @errcount@ <a href="@ds_url@send?output=@request@:error">view</a></p>
+    </if>
+    <if @comments:rowcount@ gt 0>
       <multiple name="comments">
         <b>Comment:</b> <pre style="display: inline;">@comments.text@</pre><br />
       </multiple>
-    </div>
-  </if>
-  <if @user_switching_p@ true>
-    <form action="@set_user_url@">
-      @export_vars;noquote@
-      <div class="developer-support-footer">
+      <hr />
+    </if>
+    <if @user_switching_p@ true>
+      <form action="@set_user_url@">
+        @export_vars;noquote@
         Real user: @real_user_name@ (@real_user_email@) [user_id #@real_user_id@]<br />
         <if @real_user_id@ ne @fake_user_id@>      
           Faked user: @fake_user_name@ <if @fake_user_email@ not nil>(@fake_user_email@)</if> [user_id #@fake_user_id@] <a href="@unfake_url@">(Unfake)</a><br />
@@ -23,28 +25,21 @@
           </multiple>
         </select></if><else><input type="text" name="keyword"><input type="hidden" name="target" value="@target@"></else>
         <input type="submit" value="Go">
-      </div>
-    </form>
-  </if>
-  <if @profiling:rowcount@ gt 0>
-    <div class="developer-support-footer">
+      </form>
+      <hr />
+    </if>
+    <if @profiling:rowcount@ gt 0>
       <h3>Profiling Information</h3>
-      <table>
-        <tr>
-          <th>Tag</th>
-          <th># Iterations</th>
-          <th>Total time </th>
-          <th>Avg. time per iteration</th>
-        </tr>
-        <multiple name="profiling">
-          <tr>
-            <td>@profiling.tag@</td>
-            <td align="right">@profiling.num_iterations@</td>
-            <td align="right">@profiling.total_ms@ ms</td>
-            <td align="right">@profiling.ms_per_iteration@ ms</td>
-          </tr>
-        </multiple>
-      </table>
-    </div>
-  </if>
+      <listtemplate name="profiling"></listtemplate>
+      <if @page_fragment_cache_p@ true>
+        <p>
+          <form name="searchfrags" action="@ds_url@search">
+            <input type="hidden" name="request" value="@request@"/>
+            <input type="text" name="expression" value="" />
+            <input type="submit" name="search" value="Search"/>
+          </form>
+        </p></if>
+
+    </if>
+  </div>
 </if>
