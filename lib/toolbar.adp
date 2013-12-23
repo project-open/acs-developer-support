@@ -15,8 +15,12 @@
 
       <td align="center" class="actions">
         <ul>
-          <li><a href="@request_info_url@" title="View request information">@request_info_label@</a>
+	      <li><a href="@request_info_url@" title="View request information">@request_info_label@</a>
           <span>|</span></li>
+	      <li><a href="/intranet/admin/parameters" title="View Parameters">PAR</a>
+          <span>|</span></li>    
+	      <li><a href="/intranet/admin/profiles" title="View Profiles">PRF</a>
+          <span>|</span></li>    
           <li><a href="@oacs_shell_url@" title="Execute commands and see the result">Shell</a>
           <span>|</span></li>
           <li><a href="@base_url@/acs-admin/apm/" title="Modify/reload packages">APM</a>
