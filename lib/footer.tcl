@@ -57,7 +57,7 @@ if { [ds_show_p] } {
         set unfake_url [export_vars -base $set_user_url { { user_id $real_user_id } { return_url [ad_return_url] } }]
 
         #Decide what to do based on how many users there are.
-        set n_users [util_memoize {db_string select_n_users "select count(user_id) from users" -default "unknown"} 300]
+        set n_users [util_memoize [list db_string select_n_users "select count(user_id) from users" -default "unknown"] 300]
 
         if { $n_users > 100 } {
             set search_p 1
