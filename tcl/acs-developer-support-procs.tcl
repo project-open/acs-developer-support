@@ -282,7 +282,7 @@
              set total 0
              set counter 0
              foreach { handle command statement_name sql start end errno error } [nsv_get ds_request "$ad_conn(request).db"] {
-                 incr total [expr { $end - $start }]
+                 set total [expr int($total + $end - $start)]
                  if { [lsearch { dml exec 1row 0or1row select } [lindex $command 0]] >= 0 } {
                      incr counter
                  }
@@ -292,6 +292,7 @@
      }
      return $result
  }
+
 
  ad_proc -private ds_collect_connection_info {} { 
      Collects information about the current connection. 
