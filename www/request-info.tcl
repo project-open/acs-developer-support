@@ -64,7 +64,7 @@ if { [info exists property(conn)] } {
 		    set value "<pre>[ns_quotehtml $conn($key)]</pre>"
 		}
 		endclicks {
-		    set value "[format "%.f" [expr { ($conn(endclicks) - $conn(startclicks)) }]] ms"
+		    set value "[format "%.f" [expr ($conn(endclicks) - $conn(startclicks)) ]] ms"
 		}
 		end {
 		    set value [clock format $conn($key) -format "%Y-%m-%d %H:%M:%S"  ]
@@ -108,14 +108,14 @@ if { [info exists property(rp)] } {
 	set action [lindex $rp 4]
 	set error [lindex $rp 5]
 
-	set duration "[format "%.1f" [expr { ($endclicks - $startclicks) }]] ms"
+	set duration "[format "%.1f" [expr ($endclicks - $startclicks) ]] ms"
 
 	if { [string equal $kind debug] && !$rp_show_debug_p } {
 	    continue
 	}
 
 	if { [info exists conn(startclicks)] } {
-	    append body "<li>[format "%+06.1f" [expr { ($startclicks - $conn(startclicks)) }]] ms: "
+	    append body "<li>[format "%+06.1f" [expr ($startclicks - $conn(startclicks))]] ms: "
 	} else {
 	    append body "<li>"
 	}
@@ -256,7 +256,7 @@ if { ![info exists property(db)] } {
 	}
 
         if { ![string equal $command "getrow"] || [template::util::is_true $getrow_p] } {
-            multirow append dbreqs $handle $command $sql [expr { $end - $start }] $value
+            multirow append dbreqs $handle $command $sql [expr int($end - $start)] $value
         }
 
     }
