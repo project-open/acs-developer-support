@@ -34,7 +34,7 @@ if { [ds_show_p] } {
     if { $user_switching_p } {
 
         set show_p 1
-        set fake_user_id [ad_get_user_id]
+        set fake_user_id [ad_conn user_id]
         set real_user_id [ds_get_real_user_id]
 
         if { $fake_user_id == 0 } {
@@ -57,7 +57,7 @@ if { [ds_show_p] } {
         set unfake_url [export_vars -base $set_user_url { { user_id $real_user_id } { return_url [ad_return_url] } }]
 
         #Decide what to do based on how many users there are.
-        set n_users [util_memoize [list db_string select_n_users "select count(user_id) from users" -default "unknown"] 300]
+        set n_users [util_memoize {db_string select_n_users "select count(user_id) from users" -default "unknown"} 300]
 
         if { $n_users > 100 } {
             set search_p 1
@@ -97,3 +97,9 @@ if { [ds_show_p] } {
         
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

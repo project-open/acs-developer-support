@@ -7,7 +7,7 @@ ad_page_contract {
     @cvs-id $Id$
 } {
     field 
-    enabled_p
+    enabled_p:boolean
     {return_url "."}
 }
 
@@ -28,6 +28,7 @@ switch -- $field {
     }
     ds {
         nsv_set ds_properties enabled_p $enabled_p
+        set ::ds_enabled_p $enabled_p
     }
     frag {
         nsv_set ds_properties page_fragment_cache_p $enabled_p
@@ -40,3 +41,9 @@ switch -- $field {
     }
 }
 ad_returnredirect $return_url
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

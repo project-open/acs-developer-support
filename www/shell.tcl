@@ -25,12 +25,17 @@ ad_form -name shell -form {
         {html {cols 80 rows 10}}
     }
 } -on_submit {
-    if { ![string equal POST [ns_conn method]] } {
+    if { "POST" ne [ns_conn method] } {
         set out "You cannot use GET to invoke a script on this page.\nClick OK to resubmit the form as a POST."
     } else {
         if {[catch {set out [uplevel 1 [string map {"\\\r\n" " "} $script]]}]} {
-            global errorInfo
-            set out "ERROR:\n$errorInfo"
+            set out "ERROR:\n$::errorInfo"
         }
     }
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:

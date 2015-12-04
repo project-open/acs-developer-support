@@ -1,16 +1,13 @@
-# 
-
 ad_page_contract {
-    
+
     Edit and write the CSS file
-    
+
     @author Malte Sussdorff (malte.sussdorff@cognovis.de)
     @creation-date 2007-09-29
     @cvs-id $Id$
 } {
     {file_location}
     {css_location}
-    {revision_id ""}
     {return_url "/"}
 } -properties {
 } -validate {
@@ -21,7 +18,6 @@ ds_require_permission [ad_conn package_id] "admin"
 
 if {[file exists $file_location] && [file extension $file_location] eq ".css"} {
 
-    
     ad_form -name css-edit -export {file_location css_location} -form {
 	{css_path:text(inform)}
 	{revision_html:text(inform)}
@@ -30,10 +26,10 @@ if {[file exists $file_location] && [file extension $file_location] eq ".css"} {
 	}
 	{css_description:text(text),optional }
     } -on_request {
-
+	
 	set package_id [ad_conn package_id]
-	set css_path "<a href='$css_location'>$css_location</a>"
-	set fp [open "$file_location" "r"]
+	set css_path "<a href='[ns_quotehtml $css_location]'>$css_location</a>"
+	set fp [open $file_location "r"]
 	set css_content ""
 	while { [gets $fp line] >= 0 } {
 	    append css_content "$line \n"
@@ -44,15 +40,21 @@ if {[file exists $file_location] && [file extension $file_location] eq ".css"} {
 	set revision_html ""
 	if {$item_id ne ""} {
 	    append revision_html "<ol>"
-	    db_foreach revision {select revision_id, publish_date, description from cr_revisions where item_id = :item_id order by publish_date desc} {
-		if { [content::revision::is_live -revision_id $revision_id] eq "t" } {
+	    db_foreach revision {select revision_id, publish_date, description
+		from cr_revisions where item_id = :item_id order by publish_date desc
+	    } {
+		if { [content::revision::is_live -revision_id $revision_id] == "t" } {
 		    set make_live "<strong>that's live!</strong>"
 		} else {
 		    set return_url_2 [ad_return_url]
-		    set make_live "<a href=\"[export_vars -base "css-make-live" -url {revision_id return_url_2 file_location}]\">make live!</a>"
+		    set href [export_vars -base css-make-live -url {revision_id return_url_2 file_location}]
+		    set make_live [subst {<a href="[ns_quotehtml $href]">make live!</a>}]
 		}
 		set return_url ""
-		append revision_html "<li><a href='/o/$revision_id'>$publish_date</a> \[$make_live\]: [string range $description 0 50]</li>"
+		append revision_html [subst {
+		    <li><a href="/o/$revision_id">$publish_date</a>
+		    \[$make_live\]: [string range $description 0 50]</li>
+		}]
 	    }
 	    append revision_html "</ol>"
 	    file stat $file_location file_stat_arr
@@ -76,10 +78,14 @@ if {[file exists $file_location] && [file extension $file_location] eq ".css"} {
 
 	    # Get the old version to initialize the item with
 	    set fp [open "$file_location" "r"]
-            set old_css_content [read $fp]
+	    set old_css_content [read $fp]
 	    close $fp
 
-	    set item_id [content::item::new -name $file_location -parent_id $package_id -title "$css_location" -description "First revision" -text $old_css_content]
+	    set item_id [content::item::new -name $file_location \
+			     -parent_id $package_id \
+			     -title "$css_location" \
+			     -description "First revision" \
+			     -text $old_css_content]
 	}
 
 	
@@ -99,3 +105,9 @@ if {[file exists $file_location] && [file extension $file_location] eq ".css"} {
 } else {
     ad_returnredirect $return_url
 }
+
+# Local variables:
+#    mode: tcl
+#    tcl-indent-level: 4
+#    indent-tabs-mode: nil
+# End:
