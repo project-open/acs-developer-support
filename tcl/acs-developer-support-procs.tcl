@@ -205,7 +205,7 @@
          if {$ds_url ne ""} {
              append out [subst {
 		 <a href="$ds_url">Developer Support Home</a> -
-		 <a href="$ds_urlrequest-info?request=$::ad_conn(request)">Request Information</a><br>
+		 <a href="$ds_url/request-info?request=$::ad_conn(request)">Request Information</a><br>
 	     }]
          } else {
              ns_log Error "ACS-Developer-Support: Unable to offer link to Developer Support \
